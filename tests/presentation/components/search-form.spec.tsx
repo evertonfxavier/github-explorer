@@ -29,4 +29,20 @@ describe('SearchForm', () => {
     expect(screen.getByTestId('username-error')).toHaveTextContent('Campo obrigatório')
     expect(onSearch).not.toHaveBeenCalled()
   })
+
+  it('should allow submitting again after fixing a validation error', async () => {
+    const validationSpy = new ValidationSpy()
+    validationSpy.errorMessage = 'Campo obrigatório'
+    const onSearch = vi.fn()
+    render(<SearchForm validation={validationSpy} onSearch={onSearch} />)
+
+    await userEvent.click(screen.getByRole('button'))
+    expect(screen.getByTestId('username-error')).toHaveTextContent('Campo obrigatório')
+
+    validationSpy.errorMessage = ''
+    await userEvent.type(screen.getByTestId('username-input'), 'diego3g')
+    await userEvent.click(screen.getByRole('button'))
+
+    expect(onSearch).toHaveBeenCalledWith('diego3g')
+  })
 })
