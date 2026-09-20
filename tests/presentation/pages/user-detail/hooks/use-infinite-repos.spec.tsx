@@ -138,8 +138,8 @@ describe('useInfiniteRepos', () => {
     })
     await waitFor(() => expect(resolvers).toHaveLength(2))
 
-    const staleResult = { repos: [mockGithubRepoModel()], hasMore: false }
-    const freshResult = { repos: [mockGithubRepoModel()], hasMore: false }
+    const staleResult = { repos: [mockGithubRepoModel()], hasMore: false, totalCount: 1 }
+    const freshResult = { repos: [mockGithubRepoModel()], hasMore: false, totalCount: 1 }
 
     act(() => {
       resolvers[1](freshResult)
@@ -157,7 +157,7 @@ describe('useInfiniteRepos', () => {
   it('should load the next page and append results when the sentinel intersects', async () => {
     const loadGithubRepos = new LoadGithubReposSpy()
     const firstPage = mockGithubReposModel()
-    loadGithubRepos.result = { repos: firstPage, hasMore: true }
+    loadGithubRepos.result = { repos: firstPage, hasMore: true, totalCount: 3 }
 
     render(<InfiniteReposHarness loadGithubRepos={loadGithubRepos} username="diego3g" />)
 
@@ -165,7 +165,7 @@ describe('useInfiniteRepos', () => {
     await waitFor(() => expect(screen.getByTestId('sentinel-harness')).toBeInTheDocument())
 
     const secondPage = [firstPage[0]]
-    loadGithubRepos.result = { repos: secondPage, hasMore: false }
+    loadGithubRepos.result = { repos: secondPage, hasMore: false, totalCount: 3 }
 
     act(() => {
       triggerIntersection()
@@ -175,6 +175,26 @@ describe('useInfiniteRepos', () => {
 
     expect(JSON.parse(screen.getByTestId('repos-json').textContent ?? '[]')).toEqual([...firstPage, ...secondPage])
     expect(loadGithubRepos.params).toMatchObject({ page: 2 })
+  })
+
+  it('should call onTotalCountChange with the unfiltered total on load, but not while a search filter is active', async () => {
+    const loadGithubRepos = new LoadGithubReposSpy()
+    loadGithubRepos.result = { repos: mockGithubReposModel(), hasMore: false, totalCount: 42 }
+    const onTotalCountChange = vi.fn()
+    const { result } = renderHook(() => useInfiniteRepos({ loadGithubRepos, username: 'diego3g', onTotalCountChange }))
+    await waitFor(() => expect(result.current.loading).toBe(false))
+
+    expect(onTotalCountChange).toHaveBeenCalledWith(42)
+
+    onTotalCountChange.mockClear()
+    loadGithubRepos.result = { repos: [], hasMore: false, totalCount: 1 }
+
+    act(() => {
+      result.current.changeSearchQuery('ignite')
+    })
+
+    await waitFor(() => expect(result.current.searching).toBe(false))
+    expect(onTotalCountChange).not.toHaveBeenCalled()
   })
 
   it('should refetch page 1 with current params when retry is called', async () => {

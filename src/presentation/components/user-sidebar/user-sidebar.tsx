@@ -13,6 +13,7 @@ import { formatNumber } from '@/presentation/utils'
 
 type Props = {
   user: GithubUserModel
+  repoCount: number
 }
 
 const formatCreatedAt = (isoDate: string): string =>
@@ -20,7 +21,7 @@ const formatCreatedAt = (isoDate: string): string =>
 
 const withProtocol = (url: string): string => (url.startsWith('http') ? url : `https://${url}`)
 
-export function UserSidebar({ user }: Props) {
+export function UserSidebar({ user, repoCount }: Props) {
   return (
     <aside
       data-testid="user-sidebar"
@@ -76,7 +77,7 @@ export function UserSidebar({ user }: Props) {
             <FaBook /> Repositórios
           </span>
           <span data-testid="public-repos" className="text-lg font-bold text-gray-900">
-            {formatNumber(user.publicRepos)}
+            {formatNumber(repoCount)}
           </span>
         </div>
         <div className="rounded-lg bg-gray-50 p-3">

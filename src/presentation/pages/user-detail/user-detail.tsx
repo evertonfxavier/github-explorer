@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import type { LoadGithubRepos } from '@/domain/usecases'
 import { Loading } from '@/presentation/components/loading'
 import { ErrorMessage } from '@/presentation/components/error'
+import { useUserProfileContext } from '@/presentation/layouts/user-profile-layout'
 import { RepoList } from './components/repo-list'
 import { useInfiniteRepos } from './hooks/use-infinite-repos'
 
@@ -11,6 +12,7 @@ type Props = {
 
 export function UserDetail({ loadGithubRepos }: Props) {
   const { username = '' } = useParams<{ username: string }>()
+  const { setRepoCount } = useUserProfileContext()
   const {
     repos,
     sortOrder,
@@ -24,7 +26,7 @@ export function UserDetail({ loadGithubRepos }: Props) {
     changeSortOrder,
     changeSearchQuery,
     retry,
-  } = useInfiniteRepos({ loadGithubRepos, username })
+  } = useInfiniteRepos({ loadGithubRepos, username, onTotalCountChange: setRepoCount })
 
   if (loading) return <Loading />
   if (error) return <ErrorMessage error={error} reload={retry} />
