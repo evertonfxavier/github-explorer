@@ -31,7 +31,7 @@ describe('UserDetail Page', () => {
       path: '/users/:username',
     })
 
-    expect(await screen.findByTestId('error-message')).toHaveTextContent('Something went wrong. Try again.')
+    expect(await screen.findByTestId('error-message')).toHaveTextContent('Algo deu errado. Tente novamente.')
   })
 
   it('should re-sort the repo list when the sort order changes', async () => {
