@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { makeRepoDetail, makeSearch, makeUserDetail } from '@/main/factories/pages'
 import { makeUserProfileLayout } from '@/main/factories/layouts'
+import { makeHeader } from '@/main/factories/components'
 import { Footer } from '@/presentation/components/footer'
-import { Header } from '@/presentation/components/header'
 
 export function Router() {
   return (
     <BrowserRouter>
       <div className="flex h-screen flex-col overflow-hidden">
-        <Header />
+        {makeHeader()}
         <div className="flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={makeSearch()} />

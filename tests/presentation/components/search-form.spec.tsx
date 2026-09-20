@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { SearchForm } from '@/presentation/pages/search/components/search-form'
+import { SearchForm } from '@/presentation/components/search-form'
 import { ValidationSpy } from '@/tests/presentation/mocks'
 
 describe('SearchForm', () => {

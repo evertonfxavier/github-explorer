@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SearchForm } from "./components/search-form";
+import { SearchForm } from "@/presentation/components/search-form";
 import { RecentSearchesPanel } from "./components/recent-searches";
 import { GithubTokenSettings } from "./components/github-token-settings";
 import type { GithubToken, RecentSearches, Validation } from "@/presentation/protocols";
