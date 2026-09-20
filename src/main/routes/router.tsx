@@ -6,9 +6,9 @@ import { Header } from '@/presentation/components/header'
 export function Router() {
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex h-screen flex-col overflow-hidden">
         <Header />
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={makeSearch()} />
             <Route path="/users/:username" element={makeUserDetail()} />
