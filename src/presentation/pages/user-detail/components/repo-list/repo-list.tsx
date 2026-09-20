@@ -47,7 +47,7 @@ export function RepoList({ username, repos, sortOrder, onSortOrderChange }: Prop
             <Link
               to={`/user/${username}/repo/${repo.name}`}
               data-testid="repo-item"
-              className="flex flex-col gap-1 py-3 hover:bg-gray-50"
+              className="-mx-3 flex flex-col gap-1 rounded-lg px-3 py-3 hover:bg-gray-50"
             >
               <span className="font-medium">{repo.name}</span>
               {repo.description && <span className="text-sm text-gray-600">{repo.description}</span>}
