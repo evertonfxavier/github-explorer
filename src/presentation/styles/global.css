@@ -3,10 +3,9 @@
 
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  
   --color-primary: #0485f7;
 
-  /* mobile is the unprefixed base; these are the screen variants used across the app.
-     defaults (sm/md/lg/xl/2xl) are kept alongside them since @heroui/styles relies on them. */
   --breakpoint-tablet: 40rem;
   --breakpoint-desktop: 64rem;
 }
