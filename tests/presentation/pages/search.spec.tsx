@@ -42,6 +42,20 @@ describe('Search Page', () => {
     expect(recentSearches.items).toEqual(['diego3g'])
   })
 
+  it('should navigate and bump the username to the front of recent searches when a recent item is selected', async () => {
+    const recentSearches = new RecentSearchesSpy()
+    recentSearches.items = ['diego3g']
+
+    renderWithRouter(makeSut(recentSearches), {
+      probes: { '/user/:username': <div data-testid="user-detail-probe" /> },
+    })
+
+    await userEvent.click(screen.getByTestId('recent-search-item'))
+
+    expect(await screen.findByTestId('user-detail-probe')).toBeInTheDocument()
+    expect(recentSearches.items).toEqual(['diego3g'])
+  })
+
   it('should clear recent searches when the clear button is clicked', async () => {
     const recentSearches = new RecentSearchesSpy()
     recentSearches.items = ['diego3g']
