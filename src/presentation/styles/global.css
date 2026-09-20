@@ -3,7 +3,8 @@
 
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
   --color-primary: #0485f7;
 
   --breakpoint-tablet: 40rem;
