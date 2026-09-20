@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { makeRepoDetail, makeSearch, makeUserDetail } from '@/main/factories/pages'
 import { Footer } from '@/presentation/components/footer'
+import { Header } from '@/presentation/components/header'
 
 export function Router() {
   return (
     <BrowserRouter>
       <div className="flex min-h-screen flex-col">
+        <Header />
         <div className="flex-1">
           <Routes>
             <Route path="/" element={makeSearch()} />

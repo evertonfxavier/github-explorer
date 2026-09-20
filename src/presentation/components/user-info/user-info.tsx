@@ -9,7 +9,7 @@ export function UserInfo({ user }: Props) {
   return (
     <section
       data-testid="user-info"
-      className="flex flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:text-left"
+      className="flex flex-col items-center gap-3 text-center tablet:flex-row tablet:items-start tablet:text-left"
     >
       <Avatar size="lg" className="h-24 w-24">
         <Avatar.Image src={user.avatarUrl} alt={user.login} />
