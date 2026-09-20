@@ -12,27 +12,49 @@ type Props = {
   loadGithubRepos: LoadGithubRepos
 }
 
+const SORT_COMPARATORS: Record<RepoSortOrder, (a: GithubRepoModel, b: GithubRepoModel) => number> = {
+  'stars-desc': (a, b) => b.stars - a.stars,
+  'stars-asc': (a, b) => a.stars - b.stars,
+  'forks-desc': (a, b) => b.forksCount - a.forksCount,
+  'name-asc': (a, b) => a.name.localeCompare(b.name),
+  'name-desc': (a, b) => b.name.localeCompare(a.name),
+  'updated-desc': (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+}
+
 export function UserDetail({ loadGithubRepos }: Props) {
   const { username = '' } = useParams<{ username: string }>()
   const [sortOrder, setSortOrder] = useState<RepoSortOrder>('stars-desc')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const loadRepos = useCallback(() => loadGithubRepos.loadAll(username), [loadGithubRepos, username])
   const repos = useAsync(loadRepos)
 
-  const sortedRepos = useMemo<GithubRepoModel[]>(() => {
+  const visibleRepos = useMemo<GithubRepoModel[]>(() => {
     if (!repos.data) return []
-    const sorted = [...repos.data]
-    return sortOrder === 'stars-asc'
-      ? sorted.sort((a, b) => a.stars - b.stars)
-      : sorted.sort((a, b) => b.stars - a.stars)
-  }, [repos.data, sortOrder])
+
+    const query = searchQuery.trim().toLowerCase()
+    const filtered = query
+      ? repos.data.filter(
+          repo => repo.name.toLowerCase().includes(query) || repo.description?.toLowerCase().includes(query),
+        )
+      : repos.data
+
+    return [...filtered].sort(SORT_COMPARATORS[sortOrder])
+  }, [repos.data, sortOrder, searchQuery])
 
   if (repos.loading) return <Loading />
   if (repos.error) return <ErrorMessage error={repos.error} reload={repos.reload} />
 
   return (
     <main className="px-4 py-6 tablet:px-8 tablet:py-8">
-      <RepoList username={username} repos={sortedRepos} sortOrder={sortOrder} onSortOrderChange={setSortOrder} />
+      <RepoList
+        username={username}
+        repos={visibleRepos}
+        sortOrder={sortOrder}
+        onSortOrderChange={setSortOrder}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </main>
   )
 }

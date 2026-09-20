@@ -45,8 +45,28 @@ describe('UserDetail Page', () => {
     expect(screen.getAllByTestId('repo-item')[0]).toHaveTextContent('high')
 
     await userEvent.click(screen.getByTestId('sort-order'))
-    await userEvent.click(await screen.findByRole('option', { name: 'Menor primeiro' }))
+    await userEvent.click(await screen.findByRole('option', { name: 'Menos estrelas (crescente)' }))
 
     expect(screen.getAllByTestId('repo-item')[0]).toHaveTextContent('low')
+  })
+
+  it('should filter the repo list by name or description', async () => {
+    const loadGithubRepos = new LoadGithubReposSpy()
+    loadGithubRepos.result = [
+      { ...loadGithubRepos.result[0], name: 'ignite-app', description: 'a react app' },
+      { ...loadGithubRepos.result[1], name: 'other-repo', description: 'unrelated project' },
+    ]
+    renderWithRouter(<UserDetail loadGithubRepos={loadGithubRepos} />, {
+      route: '/user/diego3g',
+      path: '/user/:username',
+    })
+
+    await screen.findAllByTestId('repo-item')
+
+    await userEvent.type(screen.getByTestId('repo-search-input'), 'ignite')
+
+    const items = screen.getAllByTestId('repo-item')
+    expect(items).toHaveLength(1)
+    expect(items[0]).toHaveTextContent('ignite-app')
   })
 })
