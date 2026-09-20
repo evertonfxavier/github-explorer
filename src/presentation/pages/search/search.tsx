@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SearchForm } from "@/presentation/components/search-form";
-import { RecentSearchesPanel } from "@/presentation/components/recent-searches";
+import { SearchForm } from "./components/search-form";
+import { RecentSearchesPanel } from "./components/recent-searches";
 import type { RecentSearches, Validation } from "@/presentation/protocols";
 
 type Props = {

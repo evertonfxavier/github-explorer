@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { RecentSearchesPanel } from '@/presentation/components/recent-searches'
+import { RecentSearchesPanel } from '@/presentation/pages/search/components/recent-searches'
 
 describe('RecentSearchesPanel', () => {
   it('should render an empty state and no clear button when there are no recent searches', () => {
