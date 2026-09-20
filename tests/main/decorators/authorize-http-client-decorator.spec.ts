@@ -5,7 +5,7 @@ import { HttpClientSpy } from '@/tests/data/mocks'
 
 const makeSut = (token?: string) => {
   const httpClientSpy = new HttpClientSpy()
-  const sut = new AuthorizeHttpClientDecorator(httpClientSpy, token)
+  const sut = new AuthorizeHttpClientDecorator(httpClientSpy, () => token)
   return { sut, httpClientSpy }
 }
 
@@ -33,6 +33,19 @@ describe('AuthorizeHttpClientDecorator', () => {
     await sut.request({ url: 'any_url', method: 'get', headers: { 'X-Custom': 'value' } })
 
     expect(httpClientSpy.headers).toEqual({ 'X-Custom': 'value', Authorization: 'Bearer any_token' })
+  })
+
+  it('should re-read the token on every request instead of caching it', async () => {
+    const httpClientSpy = new HttpClientSpy()
+    const tokenBox: { value: string | undefined } = { value: undefined }
+    const sut = new AuthorizeHttpClientDecorator(httpClientSpy, () => tokenBox.value)
+
+    await sut.request({ url: 'any_url', method: 'get' })
+    expect(httpClientSpy.headers).toBeUndefined()
+
+    tokenBox.value = 'later_token'
+    await sut.request({ url: 'any_url', method: 'get' })
+    expect(httpClientSpy.headers).toEqual({ Authorization: 'Bearer later_token' })
   })
 
   it('should return the same response as the decoratee', async () => {

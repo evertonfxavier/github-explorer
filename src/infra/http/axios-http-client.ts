@@ -12,8 +12,10 @@ export class AxiosHttpClient<R = unknown> implements HttpClient<R> {
         method: data.method,
         data: data.body,
         headers: data.headers,
+        signal: data.signal,
       })
     } catch (error) {
+      if (axios.isCancel(error)) throw error
       axiosResponse = (error as { response: AxiosResponse<R> }).response
     }
 

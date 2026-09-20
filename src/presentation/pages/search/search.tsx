@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SearchForm } from "./components/search-form";
 import { RecentSearchesPanel } from "./components/recent-searches";
-import type { RecentSearches, Validation } from "@/presentation/protocols";
+import { GithubTokenSettings } from "./components/github-token-settings";
+import type { GithubToken, RecentSearches, Validation } from "@/presentation/protocols";
 
 type Props = {
   validation: Validation;
   recentSearches: RecentSearches;
+  githubToken: GithubToken;
 };
 
-export function Search({ validation, recentSearches }: Props) {
+export function Search({ validation, recentSearches, githubToken }: Props) {
   const navigate = useNavigate();
   const [recent, setRecent] = useState<string[]>(() => recentSearches.load());
 
@@ -43,6 +45,7 @@ export function Search({ validation, recentSearches }: Props) {
           onSelect={handleSearch}
           onClear={handleClear}
         />
+        <GithubTokenSettings githubToken={githubToken} />
       </div>
     </main>
   );
