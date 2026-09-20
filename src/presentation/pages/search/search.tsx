@@ -15,7 +15,7 @@ export function Search({ validation, recentSearches }: Props) {
 
   function handleSearch(username: string): void {
     setRecent(recentSearches.add(username));
-    navigate(`/users/${username}`);
+    navigate(`/user/${username}`);
   }
 
   function handleClear(): void {

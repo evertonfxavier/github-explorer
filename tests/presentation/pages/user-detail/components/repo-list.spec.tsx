@@ -16,7 +16,7 @@ describe('RepoList', () => {
 
     const items = screen.getAllByTestId('repo-item')
     expect(items).toHaveLength(repos.length)
-    expect(items[0]).toHaveAttribute('href', `/users/diego3g/repos/${repos[0].name}`)
+    expect(items[0]).toHaveAttribute('href', `/user/diego3g/repo/${repos[0].name}`)
   })
 
   it('should call onSortOrderChange when a sort option is picked', async () => {

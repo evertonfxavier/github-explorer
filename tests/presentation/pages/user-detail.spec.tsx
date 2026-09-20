@@ -9,8 +9,8 @@ describe('UserDetail Page', () => {
   it('should show loading, then the repo list', async () => {
     const loadGithubRepos = new LoadGithubReposSpy()
     renderWithRouter(<UserDetail loadGithubRepos={loadGithubRepos} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
     })
 
     expect(screen.getByRole('status')).toBeInTheDocument()
@@ -23,8 +23,8 @@ describe('UserDetail Page', () => {
     const loadGithubRepos = new LoadGithubReposSpy()
     loadGithubRepos.error = new UnexpectedError()
     renderWithRouter(<UserDetail loadGithubRepos={loadGithubRepos} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
     })
 
     expect(await screen.findByTestId('error-message')).toHaveTextContent('Algo deu errado. Tente novamente.')
@@ -37,8 +37,8 @@ describe('UserDetail Page', () => {
       { ...loadGithubRepos.result[1], name: 'high', stars: 100 },
     ]
     renderWithRouter(<UserDetail loadGithubRepos={loadGithubRepos} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
     })
 
     await screen.findAllByTestId('repo-item')
