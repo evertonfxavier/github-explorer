@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import type { LoadGithubUser } from '@/domain/usecases'
 import { useAsync } from '@/presentation/hooks'
@@ -13,6 +13,7 @@ type Props = {
 
 export function UserProfileLayout({ loadGithubUser }: Props) {
   const { username = '' } = useParams<{ username: string }>()
+  const [repoCount, setRepoCount] = useState<number>()
 
   const loadUser = useCallback(() => loadGithubUser.load(username), [loadGithubUser, username])
   const user = useAsync(loadUser)
@@ -23,9 +24,9 @@ export function UserProfileLayout({ loadGithubUser }: Props) {
 
   return (
     <div className="flex h-full flex-col tablet:flex-row tablet:overflow-hidden">
-      <UserSidebar user={user.data} />
+      <UserSidebar user={user.data} repoCount={repoCount ?? user.data.publicRepos} />
       <div className="flex-1 tablet:overflow-y-auto">
-        <Outlet context={{ user: user.data } satisfies UserProfileContext} />
+        <Outlet context={{ user: user.data, setRepoCount } satisfies UserProfileContext} />
       </div>
     </div>
   )

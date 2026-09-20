@@ -69,6 +69,16 @@ describe('RemoteLoadGithubRepos', () => {
     expect(result.repos).toEqual(body.items.map(mapGithubRepoApiModelToModel))
   })
 
+  it('should return the raw total_count from the search response as totalCount', async () => {
+    const { sut, httpClientSpy } = makeSut()
+    const body = mockGithubRepoSearchApiModel(87)
+    httpClientSpy.response = { statusCode: HttpStatusCode.ok, body }
+
+    const result = await sut.loadAll(makeParams())
+
+    expect(result.totalCount).toBe(87)
+  })
+
   it('should return hasMore true when there are more results beyond the current page', async () => {
     const { sut, httpClientSpy } = makeSut()
     const body = mockGithubRepoSearchApiModel(25)

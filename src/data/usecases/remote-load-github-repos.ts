@@ -48,6 +48,7 @@ export class RemoteLoadGithubRepos implements LoadGithubRepos {
         return {
           repos: body.items.map(mapGithubRepoApiModelToModel),
           hasMore: page * perPage < body.total_count,
+          totalCount: body.total_count,
         }
       }
       case HttpStatusCode.notFound:

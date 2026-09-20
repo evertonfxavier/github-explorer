@@ -13,6 +13,7 @@ export type LoadGithubReposParams = {
 export type LoadGithubReposResult = {
   repos: GithubRepoModel[]
   hasMore: boolean
+  totalCount: number
 }
 
 export interface LoadGithubRepos {

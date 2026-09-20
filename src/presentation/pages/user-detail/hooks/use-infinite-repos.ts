@@ -9,9 +9,10 @@ const DEFAULT_SORT_ORDER: RepoSortOrder = 'stars-desc'
 type Params = {
   loadGithubRepos: LoadGithubRepos
   username: string
+  onTotalCountChange?: (totalCount: number) => void
 }
 
-export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
+export function useInfiniteRepos({ loadGithubRepos, username, onTotalCountChange }: Params) {
   const [repos, setRepos] = useState<GithubRepoModel[]>([])
   const [sortOrder, setSortOrderState] = useState<RepoSortOrder>(DEFAULT_SORT_ORDER)
   const [searchQuery, setSearchQueryState] = useState('')
@@ -28,7 +29,7 @@ export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
   const abortControllerRef = useRef<AbortController | null>(null)
 
   const fetchPage = useCallback(
-    (page: number, order: RepoSortOrder, search: string) => {
+    (page: number, order: RepoSortOrder, search: string, onSettled?: () => void) => {
       abortControllerRef.current?.abort()
       const controller = new AbortController()
       abortControllerRef.current = controller
@@ -49,17 +50,21 @@ export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
           setRepos(prev => (page === 1 ? result.repos : [...prev, ...result.repos]))
           setHasMore(result.hasMore)
           setError(undefined)
+          if (!search.trim()) onTotalCountChange?.(result.totalCount)
         })
         .catch((err: Error) => {
           if (controller.signal.aborted) return
           setError(err.message)
         })
+        .finally(() => {
+          if (!controller.signal.aborted) onSettled?.()
+        })
     },
-    [loadGithubRepos, username],
+    [loadGithubRepos, username, onTotalCountChange],
   )
 
   useEffect(() => {
-    fetchPage(1, DEFAULT_SORT_ORDER, '').finally(() => setLoading(false))
+    fetchPage(1, DEFAULT_SORT_ORDER, '', () => setLoading(false))
   }, [fetchPage])
 
   useEffect(() => {
@@ -96,7 +101,7 @@ export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
       setSortOrderState(order)
       setLoading(true)
       setRepos([])
-      fetchPage(1, order, searchQuery).finally(() => setLoading(false))
+      fetchPage(1, order, searchQuery, () => setLoading(false))
     },
     [fetchPage, searchQuery],
   )
@@ -107,7 +112,7 @@ export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
       if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current)
       searchDebounceRef.current = setTimeout(() => {
         setSearching(true)
-        fetchPage(1, sortOrder, query).finally(() => setSearching(false))
+        fetchPage(1, sortOrder, query, () => setSearching(false))
       }, SEARCH_DEBOUNCE_MS)
     },
     [fetchPage, sortOrder],
@@ -115,7 +120,7 @@ export function useInfiniteRepos({ loadGithubRepos, username }: Params) {
 
   const retry = useCallback(() => {
     setLoading(true)
-    fetchPage(1, sortOrder, searchQuery).finally(() => setLoading(false))
+    fetchPage(1, sortOrder, searchQuery, () => setLoading(false))
   }, [fetchPage, sortOrder, searchQuery])
 
   return {

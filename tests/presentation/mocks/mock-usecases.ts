@@ -18,7 +18,7 @@ export class LoadGithubReposSpy implements LoadGithubRepos {
   params?: LoadGithubReposParams
   signal?: AbortSignal
   callCount = 0
-  result: LoadGithubReposResult = { repos: mockGithubReposModel(), hasMore: false }
+  result: LoadGithubReposResult = { repos: mockGithubReposModel(), hasMore: false, totalCount: 2 }
   error?: Error
 
   async loadAll(params: LoadGithubReposParams, signal?: AbortSignal): Promise<LoadGithubReposResult> {
