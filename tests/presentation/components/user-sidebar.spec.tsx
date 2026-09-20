@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { UserSidebar } from '@/presentation/pages/user-detail/components/user-sidebar'
+import { UserSidebar } from '@/presentation/components/user-sidebar'
 import { mockGithubUserModel } from '@/tests/domain/mocks'
 import { formatNumber } from '@/presentation/utils'
 
