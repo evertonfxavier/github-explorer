@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Key } from '@heroui/react'
 import { Label, ListBox, Select } from '@heroui/react'
+import { FaStar } from '@react-icons/all-files/fa/FaStar'
 import type { GithubRepoModel } from '@/domain/models'
 
 export type RepoSortOrder = 'stars-desc' | 'stars-asc'
@@ -49,10 +50,17 @@ export function RepoList({ username, repos, sortOrder, onSortOrderChange }: Prop
               data-testid="repo-item"
               className="-mx-3 flex flex-col gap-1 rounded-lg px-3 py-3 hover:bg-gray-50"
             >
-              <span className="font-medium">{repo.name}</span>
+              <span className="font-medium">
+                /{repo.name}
+                <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                  {repo.isPrivate ? 'Privado' : 'Público'}
+                </span>
+              </span>
               {repo.description && <span className="text-sm text-gray-600">{repo.description}</span>}
-              <div className="flex gap-3 text-xs text-gray-500">
-                <span>★ {repo.stars}</span>
+              <div className="flex items-center gap-3 text-xs text-gray-500">
+                <span className="flex items-center gap-1">
+                  <FaStar className="text-yellow-500" /> {repo.stars}
+                </span>
                 {repo.language && <span>{repo.language}</span>}
               </div>
             </Link>
