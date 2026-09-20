@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@heroui/react";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -7,9 +8,9 @@ function App() {
     <>
       <div>
         <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
+          <Button onPress={() => setCount((count) => count + 1)}>
             Count is {count}
-          </button>
+          </Button>
         </p>
       </div>
     </>
