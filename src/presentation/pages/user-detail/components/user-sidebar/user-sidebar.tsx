@@ -9,6 +9,7 @@ import { FaMapMarkerAlt } from '@react-icons/all-files/fa/FaMapMarkerAlt'
 import { FaUserFriends } from '@react-icons/all-files/fa/FaUserFriends'
 import { FaUserPlus } from '@react-icons/all-files/fa/FaUserPlus'
 import type { GithubUserModel } from '@/domain/models'
+import { formatNumber } from '@/presentation/utils'
 
 type Props = {
   user: GithubUserModel
@@ -59,7 +60,7 @@ export function UserSidebar({ user }: Props) {
             <FaUserFriends /> Seguidores
           </span>
           <span data-testid="followers" className="text-lg font-bold text-gray-900">
-            {user.followers}
+            {formatNumber(user.followers)}
           </span>
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
@@ -67,7 +68,7 @@ export function UserSidebar({ user }: Props) {
             <FaUserPlus /> Seguindo
           </span>
           <span data-testid="following" className="text-lg font-bold text-gray-900">
-            {user.following}
+            {formatNumber(user.following)}
           </span>
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
@@ -75,7 +76,7 @@ export function UserSidebar({ user }: Props) {
             <FaBook /> Repositórios
           </span>
           <span data-testid="public-repos" className="text-lg font-bold text-gray-900">
-            {user.publicRepos}
+            {formatNumber(user.publicRepos)}
           </span>
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
