@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
-import { RepoList } from '@/presentation/components/repo-list'
+import { RepoList } from '@/presentation/pages/user-detail/components/repo-list'
 import { mockGithubReposModel } from '@/tests/domain/mocks'
 
 describe('RepoList', () => {

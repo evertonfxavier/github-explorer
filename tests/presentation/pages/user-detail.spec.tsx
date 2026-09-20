@@ -16,7 +16,7 @@ describe('UserDetail Page', () => {
 
     expect(screen.getByRole('status')).toBeInTheDocument()
 
-    expect(await screen.findByTestId('user-info')).toBeInTheDocument()
+    expect(await screen.findByTestId('user-sidebar')).toBeInTheDocument()
     expect(loadGithubUser.username).toBe('diego3g')
     expect(loadGithubRepos.username).toBe('diego3g')
     expect(screen.getAllByTestId('repo-item')).toHaveLength(loadGithubRepos.result.length)
@@ -46,7 +46,7 @@ describe('UserDetail Page', () => {
       path: '/users/:username',
     })
 
-    await screen.findByTestId('user-info')
+    await screen.findByTestId('user-sidebar')
     expect(screen.getAllByTestId('repo-item')[0]).toHaveTextContent('high')
 
     await userEvent.click(screen.getByTestId('sort-order'))

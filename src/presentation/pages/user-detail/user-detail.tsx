@@ -5,9 +5,9 @@ import type { GithubRepoModel } from '@/domain/models'
 import { useAsync } from '@/presentation/hooks'
 import { Loading } from '@/presentation/components/loading'
 import { ErrorMessage } from '@/presentation/components/error'
-import { UserInfo } from '@/presentation/components/user-info'
-import { RepoList } from '@/presentation/components/repo-list'
-import type { RepoSortOrder } from '@/presentation/components/repo-list'
+import { UserSidebar } from './components/user-sidebar'
+import { RepoList } from './components/repo-list'
+import type { RepoSortOrder } from './components/repo-list'
 
 type Props = {
   loadGithubUser: LoadGithubUser
@@ -38,9 +38,11 @@ export function UserDetail({ loadGithubUser, loadGithubRepos }: Props) {
   if (!user.data) return null
 
   return (
-    <main className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-10">
-      <UserInfo user={user.data} />
-      <RepoList username={username} repos={sortedRepos} sortOrder={sortOrder} onSortOrderChange={setSortOrder} />
-    </main>
+    <div className="flex h-full flex-col tablet:flex-row tablet:overflow-hidden">
+      <UserSidebar user={user.data} />
+      <div className="flex-1 px-4 py-6 tablet:overflow-y-auto tablet:px-8 tablet:py-8">
+        <RepoList username={username} repos={sortedRepos} sortOrder={sortOrder} onSortOrderChange={setSortOrder} />
+      </div>
+    </div>
   )
 }
