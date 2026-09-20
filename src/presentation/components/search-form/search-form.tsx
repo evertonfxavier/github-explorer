@@ -12,6 +12,11 @@ export function SearchForm({ validation, onSearch }: Props) {
   const [username, setUsername] = useState('')
   const [error, setError] = useState('')
 
+  function handleChange(value: string): void {
+    setUsername(value)
+    if (error) setError(validation.validate('username', value))
+  }
+
   function handleSubmit(event: FormEvent): void {
     event.preventDefault()
 
@@ -24,7 +29,7 @@ export function SearchForm({ validation, onSearch }: Props) {
 
   return (
     <Form onSubmit={handleSubmit} className="w-full max-w-md">
-      <TextField isInvalid={!!error} name="username" value={username} onChange={setUsername} className="w-full">
+      <TextField isInvalid={!!error} name="username" value={username} onChange={handleChange} className="w-full">
         <Label className="sr-only">Usuário do GitHub</Label>
         <div className="flex gap-2">
           <Input
