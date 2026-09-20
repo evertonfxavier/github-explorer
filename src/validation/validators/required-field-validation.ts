@@ -9,6 +9,6 @@ export class RequiredFieldValidation implements FieldValidation {
   }
 
   validate(fieldValue: string): Error | undefined {
-    return fieldValue ? undefined : new RequiredFieldError(this.field)
+    return fieldValue ? undefined : new RequiredFieldError()
   }
 }
