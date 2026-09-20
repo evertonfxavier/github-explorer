@@ -1,0 +1,25 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { makeRepoDetail, makeSearch, makeUserDetail } from '@/main/factories/pages'
+import { makeUserProfileLayout } from '@/main/factories/layouts'
+import { makeHeader } from '@/main/factories/components'
+import { Footer } from '@/presentation/components/footer'
+
+export function Router() {
+  return (
+    <BrowserRouter>
+      <div className="flex h-screen flex-col overflow-hidden">
+        {makeHeader()}
+        <div className="flex-1 overflow-y-auto">
+          <Routes>
+            <Route path="/" element={makeSearch()} />
+            <Route path="/user/:username" element={makeUserProfileLayout()}>
+              <Route index element={makeUserDetail()} />
+              <Route path="repo/:name" element={makeRepoDetail()} />
+            </Route>
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    </BrowserRouter>
+  )
+}
