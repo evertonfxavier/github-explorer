@@ -10,8 +10,8 @@ describe('UserProfileLayout', () => {
   it('should show loading, then the user sidebar and the outlet content', async () => {
     const loadGithubUser = new LoadGithubUserSpy()
     renderWithRouter(<UserProfileLayout loadGithubUser={loadGithubUser} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
       children: <Route index element={<div data-testid="outlet-child" />} />,
     })
 
@@ -26,8 +26,8 @@ describe('UserProfileLayout', () => {
     const loadGithubUser = new LoadGithubUserSpy()
     loadGithubUser.error = new UnexpectedError()
     renderWithRouter(<UserProfileLayout loadGithubUser={loadGithubUser} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
       children: <Route index element={<div data-testid="outlet-child" />} />,
     })
 
@@ -37,19 +37,19 @@ describe('UserProfileLayout', () => {
   it('should keep the sidebar mounted and not reload the user when navigating between nested routes', async () => {
     const loadGithubUser = new LoadGithubUserSpy()
     renderWithRouter(<UserProfileLayout loadGithubUser={loadGithubUser} />, {
-      route: '/users/diego3g',
-      path: '/users/:username',
+      route: '/user/diego3g',
+      path: '/user/:username',
       children: (
         <>
           <Route
             index
             element={
-              <Link to="repos/ignite" data-testid="go-to-repo">
+              <Link to="repo/ignite" data-testid="go-to-repo">
                 go
               </Link>
             }
           />
-          <Route path="repos/:name" element={<div data-testid="repo-child" />} />
+          <Route path="repo/:name" element={<div data-testid="repo-child" />} />
         </>
       ),
     })

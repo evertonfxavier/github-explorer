@@ -7,7 +7,7 @@ import { RecentSearchesSpy, ValidationSpy, renderWithRouter } from '@/tests/pres
 describe('Search Page', () => {
   it('should navigate to the user detail route on a valid search', async () => {
     renderWithRouter(<Search validation={new ValidationSpy()} recentSearches={new RecentSearchesSpy()} />, {
-      probes: { '/users/:username': <div data-testid="user-detail-probe" /> },
+      probes: { '/user/:username': <div data-testid="user-detail-probe" /> },
     })
 
     await userEvent.type(screen.getByTestId('username-input'), 'diego3g')
@@ -29,7 +29,7 @@ describe('Search Page', () => {
   it('should add the searched username to recent searches on a valid search', async () => {
     const recentSearches = new RecentSearchesSpy()
     renderWithRouter(<Search validation={new ValidationSpy()} recentSearches={recentSearches} />, {
-      probes: { '/users/:username': <div data-testid="user-detail-probe" /> },
+      probes: { '/user/:username': <div data-testid="user-detail-probe" /> },
     })
 
     await userEvent.type(screen.getByTestId('username-input'), 'diego3g')

@@ -45,7 +45,7 @@ export function RepoList({ username, repos, sortOrder, onSortOrderChange }: Prop
         {repos.map(repo => (
           <li key={repo.fullName}>
             <Link
-              to={`/users/${username}/repos/${repo.name}`}
+              to={`/user/${username}/repo/${repo.name}`}
               data-testid="repo-item"
               className="flex flex-col gap-1 py-3 hover:bg-gray-50"
             >

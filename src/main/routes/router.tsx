@@ -12,9 +12,9 @@ export function Router() {
         <div className="flex-1 overflow-y-auto">
           <Routes>
             <Route path="/" element={makeSearch()} />
-            <Route path="/users/:username" element={makeUserProfileLayout()}>
+            <Route path="/user/:username" element={makeUserProfileLayout()}>
               <Route index element={makeUserDetail()} />
-              <Route path="repos/:name" element={makeRepoDetail()} />
+              <Route path="repo/:name" element={makeRepoDetail()} />
             </Route>
           </Routes>
         </div>
