@@ -1,59 +1,47 @@
-import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { LoadGithubRepos } from '@/domain/usecases'
-import type { GithubRepoModel } from '@/domain/models'
-import { useAsync } from '@/presentation/hooks'
 import { Loading } from '@/presentation/components/loading'
 import { ErrorMessage } from '@/presentation/components/error'
 import { RepoList } from './components/repo-list'
-import type { RepoSortOrder } from './components/repo-list'
+import { useInfiniteRepos } from './hooks/use-infinite-repos'
 
 type Props = {
   loadGithubRepos: LoadGithubRepos
 }
 
-const SORT_COMPARATORS: Record<RepoSortOrder, (a: GithubRepoModel, b: GithubRepoModel) => number> = {
-  'stars-desc': (a, b) => b.stars - a.stars,
-  'stars-asc': (a, b) => a.stars - b.stars,
-  'forks-desc': (a, b) => b.forksCount - a.forksCount,
-  'name-asc': (a, b) => a.name.localeCompare(b.name),
-  'name-desc': (a, b) => b.name.localeCompare(a.name),
-  'updated-desc': (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-}
-
 export function UserDetail({ loadGithubRepos }: Props) {
   const { username = '' } = useParams<{ username: string }>()
-  const [sortOrder, setSortOrder] = useState<RepoSortOrder>('stars-desc')
-  const [searchQuery, setSearchQuery] = useState('')
+  const {
+    repos,
+    sortOrder,
+    searchQuery,
+    hasMore,
+    loading,
+    loadingMore,
+    searching,
+    error,
+    sentinelRef,
+    changeSortOrder,
+    changeSearchQuery,
+    retry,
+  } = useInfiniteRepos({ loadGithubRepos, username })
 
-  const loadRepos = useCallback(() => loadGithubRepos.loadAll(username), [loadGithubRepos, username])
-  const repos = useAsync(loadRepos)
-
-  const visibleRepos = useMemo<GithubRepoModel[]>(() => {
-    if (!repos.data) return []
-
-    const query = searchQuery.trim().toLowerCase()
-    const filtered = query
-      ? repos.data.filter(
-          repo => repo.name.toLowerCase().includes(query) || repo.description?.toLowerCase().includes(query),
-        )
-      : repos.data
-
-    return [...filtered].sort(SORT_COMPARATORS[sortOrder])
-  }, [repos.data, sortOrder, searchQuery])
-
-  if (repos.loading) return <Loading />
-  if (repos.error) return <ErrorMessage error={repos.error} reload={repos.reload} />
+  if (loading) return <Loading />
+  if (error) return <ErrorMessage error={error} reload={retry} />
 
   return (
     <main className="px-4 py-6 tablet:px-8 tablet:py-8">
       <RepoList
         username={username}
-        repos={visibleRepos}
+        repos={repos}
         sortOrder={sortOrder}
-        onSortOrderChange={setSortOrder}
+        onSortOrderChange={changeSortOrder}
         searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
+        onSearchQueryChange={changeSearchQuery}
+        hasMore={hasMore}
+        loadingMore={loadingMore}
+        searching={searching}
+        sentinelRef={sentinelRef}
       />
     </main>
   )

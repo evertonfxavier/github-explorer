@@ -5,6 +5,7 @@ export type HttpRequest = {
   method: HttpMethod
   body?: unknown
   headers?: Record<string, string>
+  signal?: AbortSignal
 }
 
 export const HttpStatusCode = {

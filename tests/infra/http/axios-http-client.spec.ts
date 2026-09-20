@@ -25,7 +25,27 @@ describe('AxiosHttpClient', () => {
       method: 'get',
       data: undefined,
       headers: { Authorization: 'Bearer any_token' },
+      signal: undefined,
     })
+  })
+
+  it('should forward the given AbortSignal to axios.request', async () => {
+    const sut = makeSut()
+    mockedAxios.request.mockResolvedValueOnce(mockAxiosResponse({ any: 'data' }))
+    const controller = new AbortController()
+
+    await sut.request({ url: 'any_url', method: 'get', signal: controller.signal })
+
+    expect(mockedAxios.request).toHaveBeenCalledWith(expect.objectContaining({ signal: controller.signal }))
+  })
+
+  it('should rethrow the error when the request is canceled instead of reading .response', async () => {
+    const sut = makeSut()
+    const cancelError = new Error('canceled')
+    mockedAxios.isCancel.mockReturnValueOnce(true)
+    mockedAxios.request.mockRejectedValueOnce(cancelError)
+
+    await expect(sut.request({ url: 'any_url', method: 'get' })).rejects.toThrow(cancelError)
   })
 
   it('should return correct statusCode and body on success', async () => {

@@ -1,3 +1,4 @@
+import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
@@ -15,6 +16,10 @@ const renderRepoList = (props: Partial<Parameters<typeof RepoList>[0]> = {}) =>
         onSortOrderChange={() => {}}
         searchQuery=""
         onSearchQueryChange={() => {}}
+        hasMore={false}
+        loadingMore={false}
+        searching={false}
+        sentinelRef={createRef<HTMLDivElement>()}
         {...props}
       />
     </MemoryRouter>,
@@ -37,6 +42,19 @@ describe('RepoList', () => {
     expect(screen.queryByTestId('repo-item')).not.toBeInTheDocument()
   })
 
+  it('should show the sentinel when hasMore is true, with a loading indicator when loadingMore', () => {
+    renderRepoList({ hasMore: true, loadingMore: true })
+
+    expect(screen.getByTestId('repo-list-sentinel')).toBeInTheDocument()
+    expect(screen.getByText('Carregando mais repositórios...')).toBeInTheDocument()
+  })
+
+  it('should not show the sentinel when hasMore is false', () => {
+    renderRepoList({ hasMore: false })
+
+    expect(screen.queryByTestId('repo-list-sentinel')).not.toBeInTheDocument()
+  })
+
   it('should call onSortOrderChange when a sort option is picked', async () => {
     const onSortOrderChange = vi.fn()
     renderRepoList({ onSortOrderChange })
@@ -54,5 +72,18 @@ describe('RepoList', () => {
     await userEvent.type(screen.getByTestId('repo-search-input'), 'ignite')
 
     expect(onSearchQueryChange).toHaveBeenCalled()
+  })
+
+  it('should show a spinner in the search field while searching, without removing the input', () => {
+    renderRepoList({ searching: true })
+
+    expect(screen.getByTestId('repo-search-spinner')).toBeInTheDocument()
+    expect(screen.getByTestId('repo-search-input')).toBeInTheDocument()
+  })
+
+  it('should not show the search spinner when not searching', () => {
+    renderRepoList({ searching: false })
+
+    expect(screen.queryByTestId('repo-search-spinner')).not.toBeInTheDocument()
   })
 })

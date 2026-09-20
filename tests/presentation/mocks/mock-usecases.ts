@@ -1,4 +1,4 @@
-import type { LoadGithubRepo, LoadGithubRepos, LoadGithubUser } from '@/domain/usecases'
+import type { LoadGithubRepo, LoadGithubRepos, LoadGithubReposParams, LoadGithubReposResult, LoadGithubUser } from '@/domain/usecases'
 import type { GithubRepoModel, GithubUserModel } from '@/domain/models'
 import { mockGithubRepoModel, mockGithubReposModel, mockGithubUserModel } from '@/tests/domain/mocks'
 
@@ -15,12 +15,16 @@ export class LoadGithubUserSpy implements LoadGithubUser {
 }
 
 export class LoadGithubReposSpy implements LoadGithubRepos {
-  username?: string
-  result: GithubRepoModel[] = mockGithubReposModel()
+  params?: LoadGithubReposParams
+  signal?: AbortSignal
+  callCount = 0
+  result: LoadGithubReposResult = { repos: mockGithubReposModel(), hasMore: false }
   error?: Error
 
-  async loadAll(username: string): Promise<GithubRepoModel[]> {
-    this.username = username
+  async loadAll(params: LoadGithubReposParams, signal?: AbortSignal): Promise<LoadGithubReposResult> {
+    this.params = params
+    this.signal = signal
+    this.callCount++
     if (this.error) throw this.error
     return this.result
   }

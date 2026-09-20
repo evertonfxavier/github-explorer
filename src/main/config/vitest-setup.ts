@@ -6,3 +6,20 @@ afterEach(() => {
   cleanup()
 })
 
+class IntersectionObserverStub implements IntersectionObserver {
+  readonly root = null
+  readonly rootMargin = ''
+  readonly scrollMargin = ''
+  readonly thresholds: number[] = []
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return []
+  }
+}
+
+if (!('IntersectionObserver' in globalThis)) {
+  globalThis.IntersectionObserver = IntersectionObserverStub as unknown as typeof IntersectionObserver
+}
+
