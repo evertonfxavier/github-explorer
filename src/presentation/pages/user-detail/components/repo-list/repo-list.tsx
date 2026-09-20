@@ -67,7 +67,7 @@ export function RepoList({
             onChange={(value: Key | null) =>
               onSortOrderChange(value as RepoSortOrder)
             }
-            className="w-72"
+            className="w-full tablet:w-72"
           >
             <Label className="sr-only">Ordenar repositórios</Label>
             <Select.Trigger
