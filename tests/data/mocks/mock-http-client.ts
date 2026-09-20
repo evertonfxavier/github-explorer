@@ -1,12 +1,16 @@
-import type { HttpGetClient, HttpGetParams, HttpResponse } from '@/data/protocols/http'
+import type { HttpClient, HttpRequest, HttpResponse } from '@/data/protocols/http'
 import { HttpStatusCode } from '@/data/protocols/http'
 
-export class HttpGetClientSpy<R = unknown> implements HttpGetClient<R> {
+export class HttpClientSpy<R = unknown> implements HttpClient<R> {
   url?: string
+  method?: HttpRequest['method']
+  headers?: Record<string, string>
   response: HttpResponse<R> = { statusCode: HttpStatusCode.ok }
 
-  async get(params: HttpGetParams): Promise<HttpResponse<R>> {
-    this.url = params.url
+  async request(data: HttpRequest): Promise<HttpResponse<R>> {
+    this.url = data.url
+    this.method = data.method
+    this.headers = data.headers
     return this.response
   }
 }
