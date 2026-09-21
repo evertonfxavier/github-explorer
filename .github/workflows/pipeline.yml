@@ -54,7 +54,7 @@ jobs:
   Deploy-Production:
     name: Deploy Production Job
     needs: CI
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
