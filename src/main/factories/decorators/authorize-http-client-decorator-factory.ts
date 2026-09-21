@@ -5,8 +5,5 @@ import type { HttpClient } from '@/data/protocols/http'
 
 export const makeAuthorizeHttpClientDecorator = <R = unknown>(): HttpClient<R> => {
   const githubToken = makeGithubToken()
-  return new AuthorizeHttpClientDecorator<R>(
-    makeAxiosHttpClient<R>(),
-    () => githubToken.load() ?? import.meta.env.VITE_GITHUB_API_TOKEN,
-  )
+  return new AuthorizeHttpClientDecorator<R>(makeAxiosHttpClient<R>(), () => githubToken.load())
 }
