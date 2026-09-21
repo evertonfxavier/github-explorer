@@ -26,13 +26,13 @@ describe('RemoteLoadGithubRepos', () => {
     const { sut, httpClientSpy } = makeSut()
     httpClientSpy.response = { statusCode: HttpStatusCode.ok, body: mockGithubRepoSearchApiModel() }
 
-    await sut.loadAll(makeParams({ page: 2, perPage: 10, sortOrder: 'forks-desc' }))
+    await sut.loadAll(makeParams({ page: 2, perPage: 10, sortOrder: 'updated-desc' }))
 
     expect(httpClientSpy.method).toBe('get')
     const url = new URL(httpClientSpy.url as string)
     expect(url.origin + url.pathname).toBe('https://api.github.com/search/repositories')
     expect(url.searchParams.get('q')).toBe('user:diego3g')
-    expect(url.searchParams.get('sort')).toBe('forks')
+    expect(url.searchParams.get('sort')).toBe('updated')
     expect(url.searchParams.get('order')).toBe('desc')
     expect(url.searchParams.get('page')).toBe('2')
     expect(url.searchParams.get('per_page')).toBe('10')

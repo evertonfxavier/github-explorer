@@ -85,11 +85,11 @@ describe('useInfiniteRepos', () => {
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
-      result.current.changeSortOrder('forks-desc')
+      result.current.changeSortOrder('updated-desc')
     })
 
     await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(loadGithubRepos.params).toMatchObject({ page: 1, sortOrder: 'forks-desc' })
+    expect(loadGithubRepos.params).toMatchObject({ page: 1, sortOrder: 'updated-desc' })
   })
 
   it('should debounce changeSearchQuery before fetching, using the searching flag instead of loading', async () => {
@@ -134,7 +134,7 @@ describe('useInfiniteRepos', () => {
     await waitFor(() => expect(resolvers).toHaveLength(1))
 
     act(() => {
-      result.current.changeSortOrder('forks-desc')
+      result.current.changeSortOrder('updated-desc')
     })
     await waitFor(() => expect(resolvers).toHaveLength(2))
 

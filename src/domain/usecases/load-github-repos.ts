@@ -1,6 +1,6 @@
 import type { GithubRepoModel } from '@/domain/models'
 
-export type RepoSortOrder = 'stars-desc' | 'stars-asc' | 'forks-desc' | 'updated-desc'
+export type RepoSortOrder = 'stars-desc' | 'stars-asc' | 'updated-desc'
 
 export type LoadGithubReposParams = {
   username: string
