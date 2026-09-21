@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import type { Key } from "@heroui/react";
 import { Label, ListBox, Select, SearchField, Spinner } from "@heroui/react";
 import { FaClock } from "@react-icons/all-files/fa/FaClock";
-import { FaCodeBranch } from "@react-icons/all-files/fa/FaCodeBranch";
 import { FaStar } from "@react-icons/all-files/fa/FaStar";
 import type { GithubRepoModel } from "@/domain/models";
 import type { RepoSortOrder } from "@/domain/usecases";
@@ -96,12 +95,6 @@ export function RepoList({
                   <span className="flex items-center gap-2">
                     <FaStar className="text-yellow-500" /> Menos estrelas
                     (crescente)
-                  </span>
-                  <ListBox.ItemIndicator />
-                </ListBox.Item>
-                <ListBox.Item id="forks-desc" textValue="Mais forks">
-                  <span className="flex items-center gap-2">
-                    <FaCodeBranch className="text-gray-400" /> Mais forks
                   </span>
                   <ListBox.ItemIndicator />
                 </ListBox.Item>

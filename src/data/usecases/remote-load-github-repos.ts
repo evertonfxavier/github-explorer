@@ -8,7 +8,6 @@ import { NotFoundError, UnexpectedError } from '@/domain/errors'
 const SORT_QUERY_PARAMS: Record<RepoSortOrder, { sort: string; order: string }> = {
   'stars-desc': { sort: 'stars', order: 'desc' },
   'stars-asc': { sort: 'stars', order: 'asc' },
-  'forks-desc': { sort: 'forks', order: 'desc' },
   'updated-desc': { sort: 'updated', order: 'desc' },
 }
 

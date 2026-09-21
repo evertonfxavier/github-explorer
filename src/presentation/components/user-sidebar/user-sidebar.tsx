@@ -1,4 +1,4 @@
-import { Link } from '@heroui/react'
+import { Link, Skeleton } from '@heroui/react'
 import { FaBook } from '@react-icons/all-files/fa/FaBook'
 import { FaBuilding } from '@react-icons/all-files/fa/FaBuilding'
 import { FaCalendarAlt } from '@react-icons/all-files/fa/FaCalendarAlt'
@@ -14,6 +14,7 @@ import { formatNumber } from '@/presentation/utils'
 type Props = {
   user: GithubUserModel
   repoCount: number
+  repoCountLoading: boolean
 }
 
 const formatCreatedAt = (isoDate: string): string =>
@@ -21,7 +22,7 @@ const formatCreatedAt = (isoDate: string): string =>
 
 const withProtocol = (url: string): string => (url.startsWith('http') ? url : `https://${url}`)
 
-export function UserSidebar({ user, repoCount }: Props) {
+export function UserSidebar({ user, repoCount, repoCountLoading }: Props) {
   return (
     <aside
       data-testid="user-sidebar"
@@ -60,31 +61,47 @@ export function UserSidebar({ user, repoCount }: Props) {
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <FaUserFriends /> Seguidores
           </span>
-          <span data-testid="followers" className="text-lg font-bold text-gray-900">
-            {formatNumber(user.followers)}
-          </span>
+          {repoCountLoading ? (
+            <Skeleton className="mt-1 h-6 w-12 rounded" />
+          ) : (
+            <span data-testid="followers" className="text-lg font-bold text-gray-900">
+              {formatNumber(user.followers)}
+            </span>
+          )}
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <FaUserPlus /> Seguindo
           </span>
-          <span data-testid="following" className="text-lg font-bold text-gray-900">
-            {formatNumber(user.following)}
-          </span>
+          {repoCountLoading ? (
+            <Skeleton className="mt-1 h-6 w-12 rounded" />
+          ) : (
+            <span data-testid="following" className="text-lg font-bold text-gray-900">
+              {formatNumber(user.following)}
+            </span>
+          )}
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <FaBook /> Repositórios
           </span>
-          <span data-testid="public-repos" className="text-lg font-bold text-gray-900">
-            {formatNumber(repoCount)}
-          </span>
+          {repoCountLoading ? (
+            <Skeleton className="mt-1 h-6 w-12 rounded" />
+          ) : (
+            <span data-testid="public-repos" className="text-lg font-bold text-gray-900">
+              {formatNumber(repoCount)}
+            </span>
+          )}
         </div>
         <div className="rounded-lg bg-gray-50 p-3">
           <span className="flex items-center gap-1.5 text-xs text-gray-500">
             <FaCalendarAlt /> No GitHub desde
           </span>
-          <span className="text-sm font-bold text-gray-900">{formatCreatedAt(user.createdAt)}</span>
+          {repoCountLoading ? (
+            <Skeleton className="mt-1 h-5 w-20 rounded" />
+          ) : (
+            <span className="text-sm font-bold text-gray-900">{formatCreatedAt(user.createdAt)}</span>
+          )}
         </div>
       </div>
 

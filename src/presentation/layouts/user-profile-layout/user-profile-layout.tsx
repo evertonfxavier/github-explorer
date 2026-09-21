@@ -24,7 +24,11 @@ export function UserProfileLayout({ loadGithubUser }: Props) {
 
   return (
     <div className="flex h-full flex-col tablet:flex-row tablet:overflow-hidden">
-      <UserSidebar user={user.data} repoCount={repoCount ?? user.data.publicRepos} />
+      <UserSidebar
+        user={user.data}
+        repoCount={repoCount ?? user.data.publicRepos}
+        repoCountLoading={repoCount === undefined}
+      />
       <div className="flex-1 tablet:overflow-y-auto">
         <Outlet context={{ user: user.data, setRepoCount } satisfies UserProfileContext} />
       </div>
